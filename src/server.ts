@@ -5,19 +5,19 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const port = process.env.PORT ;
-const db_url = process.env.DB_URL as string; // Ensure you have your MongoDB URI in the .env file
-console.log(db_url, port);
+const PORT = process.env.PORT; ;
+const DB_URI = process.env.DB_URI as string; // Ensure you have your MongoDB URI in the .env file
+console.log(DB_URI, PORT);
 
 
 // Connect to MongoDB
 mongoose
-  .connect(db_url)
+  .connect(DB_URI)
   .then(() => {
     console.log("Connected to MongoDB");
     // Start the server
-    app.listen(port, () => {
-      console.log(`Server is running on http://localhost:${port}`);
+    app.listen(PORT, () => {
+      console.log(`Server is running on http://localhost:${PORT}`);
     });
   })
   .catch((err) => {
