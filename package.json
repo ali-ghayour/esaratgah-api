@@ -1,0 +1,31 @@
+{
+  "name": "esaratgah.ir-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "/build/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ALI Ghayour",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "express-route-grouping": "^2.0.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.7.3",
+    "mongoose-auto-increment": "^5.0.1",
+    "multer": "^1.4.5-lts.1",
+    "yup": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/morgan": "^1.9.9",
+    "@types/multer": "^1.4.12"
+  }
+}

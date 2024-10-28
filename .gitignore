@@ -1,0 +1,11 @@
+# Ignore everything in node_modules
+/node_modules/
+
+# But include a specific file
+!/node_modules/mongoose-auto-increment/index.js
+
+# Build files
+/build/
+
+# Environment files
+.env
