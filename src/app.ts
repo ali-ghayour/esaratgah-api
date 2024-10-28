@@ -4,6 +4,7 @@ import cors from "cors";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import { json, urlencoded } from "body-parser";
+import apiRoutes from "./routes";
 // import routes from "./routes"; // Import your routes
 
 const app = express();
@@ -16,7 +17,7 @@ app.use(urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Register routes
-// app.use("/api", routes); // Prefix for your API routes
+app.use(apiRoutes); // Use the grouped routes
 
 // Error handling middleware (optional)
 app.use(
