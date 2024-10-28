@@ -7,8 +7,6 @@ dotenv.config();
 
 const PORT = process.env.PORT; ;
 const DB_URI = process.env.DB_URI as string; // Ensure you have your MongoDB URI in the .env file
-console.log(DB_URI, PORT);
-
 
 // Connect to MongoDB
 mongoose
