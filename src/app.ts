@@ -5,7 +5,6 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import { json, urlencoded } from "body-parser";
 import apiRoutes from "./routes";
-import User from "./models/User";
 import Diary from "./models/Diary";
 
 const app = express();
@@ -19,13 +18,7 @@ app.use(cookieParser());
 
 app.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    // await Diary.create({
-    //   title: "test",
-    //   // phone_number: "09358441163",
-    //   // password: "12345",
-    //   user_id: 1,
-    // });
-    const diary = await Diary.findOne().populate("user", "username");
+    const diary = await Diary.find().populate("user_id");
     res.status(200).json({
       success: true,
       diary,
