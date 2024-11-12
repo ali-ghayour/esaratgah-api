@@ -20,5 +20,9 @@ const EventSchema = new Schema(
 
 EventSchema.plugin(autoIncrement.plugin, "Event");
 
+EventSchema.index({ user_id: 1 });
+EventSchema.index({ name: 1 });
+EventSchema.index({ slug: 1 });
+
 const Event = connection.model("Event", EventSchema);
 export default Event;

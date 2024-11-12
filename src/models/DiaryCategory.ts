@@ -16,5 +16,9 @@ const DiaryCategorySchema = new Schema(
 
 DiaryCategorySchema.plugin(autoIncrement.plugin, "DiaryCategory");
 
+DiaryCategorySchema.index({ parent_id: 1 });
+DiaryCategorySchema.index({ name: 1 });
+DiaryCategorySchema.index({ slug: 1 });
+
 const DiaryCategory = connection.model("DiaryCategory", DiaryCategorySchema);
 export default DiaryCategory;
