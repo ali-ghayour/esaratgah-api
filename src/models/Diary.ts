@@ -4,7 +4,6 @@ import User from "./User";
 
 const DiarySchema = new Schema(
   {
-    diary_id: { type: Number },
     title: { type: String, required: false },
     content: { type: String, required: false },
     user_id: { type: Number, required: true, ref: User },
