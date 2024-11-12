@@ -1,6 +1,7 @@
 import { Schema } from "mongoose";
 import { connection, autoIncrement } from "../config/db";
 import User from "./User";
+import File from "./File";
 
 const EventSchema = new Schema(
   {
@@ -12,6 +13,8 @@ const EventSchema = new Schema(
     ],
     invited_users: [{ type: Number, reqired: true, unique: true, ref: User }],
     created_by: { type: Number, required: true, ref: User },
+    pictures: [{ type: Number, ref: File, unique: true }],
+    main_picture: { type: Number, ref: File, unique: true },
   },
   {
     timestamps: true,
