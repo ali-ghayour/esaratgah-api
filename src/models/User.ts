@@ -2,7 +2,7 @@
 import { Schema } from "mongoose";
 import { connection, autoIncrement } from "../config/db";
 
-interface User {
+interface UserType {
   user_id: number;
   username: string;
   phone_number: string;
@@ -13,7 +13,7 @@ interface User {
 }
 
 // Define your schema
-const UserSchema = new Schema<User>(
+const UserSchema = new Schema<UserType>(
   {
     user_id: { type: Number, reqired: true },
     username: { type: String, required: true, unique: true },
@@ -31,17 +31,11 @@ const UserSchema = new Schema<User>(
   }
 );
 
-// Apply the auto-increment plugin to a specific field (e.g., _id or another identifier)
-UserSchema.plugin(autoIncrement.plugin, {
-  model: "User", // The name of the model
-  field: "_id", // The field you want to auto-increment
-  startAt: 1, // Starting value
-  incrementBy: 1, // Increment by
-});
+UserSchema.plugin(autoIncrement.plugin, "User");
 
 UserSchema.index({ user_id: 1 });
 UserSchema.index({ username: 1 });
 UserSchema.index({ phone_nimber: 1 });
 
-// Export the model using the shared connection
-export default connection.model("User", UserSchema);
+const User = connection.model("User", UserSchema);
+export default User;
