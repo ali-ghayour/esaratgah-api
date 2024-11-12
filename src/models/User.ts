@@ -15,7 +15,6 @@ interface UserType {
 // Define your schema
 const UserSchema = new Schema<UserType>(
   {
-    user_id: { type: Number, reqired: true },
     username: { type: String, required: true, unique: true },
     phone_number: { type: String, required: true, unique: true },
     password: { type: String, required: true },
