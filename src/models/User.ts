@@ -13,6 +13,7 @@ export interface IUser extends Document {
   permissions: Array<number>;
   camp: string;
   categories: Array<string>;
+  files: { total_file: number; total_file_size: number };
 }
 
 const UserSchema = new Schema<IUser>(
@@ -30,6 +31,10 @@ const UserSchema = new Schema<IUser>(
     permissions: [{ type: Number, reqired: false, ref: Permission }],
     camp: { type: String },
     categories: ["objectId"],
+    files: {
+      total_file: { type: Number, required: false, default: 0 },
+      total_file_size: { type: Number, required: false, default: 0 },
+    },
   },
   {
     timestamps: true,
