@@ -1,5 +1,4 @@
 import getUserWithDetails from "../helpers/getUserWithDetails";
-import User, { IUser, IUserPopulated } from "../models/User";
 
 export const checkPermission = (permissionName: string) => {
   return async (req: any, res: any, next: any) => {
@@ -37,3 +36,5 @@ export const checkPermission = (permissionName: string) => {
     }
   };
 };
+
+export default checkPermission;
