@@ -6,6 +6,8 @@ import Permission from "./Permission";
 
 export interface IUser extends Document {
   user_id: number;
+  name: string;
+  familly: string;
   username: string;
   phone_number: string;
   password: string;
@@ -18,6 +20,8 @@ export interface IUser extends Document {
 
 const UserSchema = new Schema<IUser>(
   {
+    name: { type: String, requred: true },
+    familly: { type: String, requred: true },
     username: { type: String, required: true, unique: true },
     phone_number: { type: String, required: true, unique: true },
     password: { type: String, required: true },
