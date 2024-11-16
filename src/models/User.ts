@@ -16,6 +16,7 @@ export interface IUser extends Document {
   camp: string;
   categories: Array<string>;
   files: { total_file: number; total_file_size: number };
+  otp: { code: string; expire_at: number };
 }
 
 export interface IUserPopulated extends Omit<IUser, "role" | "permissions"> {
@@ -43,6 +44,10 @@ const UserSchema = new Schema<IUser>(
     files: {
       total_file: { type: Number, required: false, default: 0 },
       total_file_size: { type: Number, required: false, default: 0 },
+    },
+    otp: {
+      code: { type: String, required: false },
+      expire_at: { type: Number, required: false },
     },
   },
   {
