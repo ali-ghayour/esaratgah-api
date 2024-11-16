@@ -1,8 +1,8 @@
 // src/models/User.ts
 import { Document, Schema } from "mongoose";
 import { connection, autoIncrement } from "../config/db";
-import Role from "./Role";
-import Permission from "./Permission";
+import Role, { IRole, IRolePopulated } from "./Role";
+import Permission, { IPermission } from "./Permission";
 
 export interface IUser extends Document {
   user_id: number;
@@ -12,10 +12,15 @@ export interface IUser extends Document {
   phone_number: string;
   password: string;
   role: number[];
-  permissions: Array<number>;
+  permissions: number[];
   camp: string;
   categories: Array<string>;
   files: { total_file: number; total_file_size: number };
+}
+
+export interface IUserPopulated extends Omit<IUser, "role" | "permissions"> {
+  role: IRole[]; // Populated roles
+  permissions: IPermission[]; // Populated permissions
 }
 
 const UserSchema = new Schema<IUser>(

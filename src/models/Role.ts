@@ -1,12 +1,16 @@
 import { Schema } from "mongoose";
 import { connection, autoIncrement } from "../config/db";
-import Permission from "./Permission";
+import Permission, { IPermission } from "./Permission";
 
 export interface IRole extends Document {
   _id: number;
   name: string;
   slug: string;
   permissions: number[];
+}
+
+export interface IRolePopulated extends Omit<IRole, "permissions"> {
+  permissions: IPermission[];
 }
 
 const RoleSchema = new Schema<IRole>(
