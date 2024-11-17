@@ -1,8 +1,17 @@
-import { Schema } from "mongoose";
+import { Schema, Document } from "mongoose";
 import { connection, autoIncrement } from "../config/db";
 import User from "./User";
 
-const FileSchema = new Schema(
+export interface IFile extends Document {
+  name: string;
+  type: string;
+  path: string;
+  size: number;
+  status: string;
+  created_by: number;
+}
+
+const FileSchema = new Schema<IFile>(
   {
     name: { type: String, required: true },
     type: { type: String, required: true },
@@ -14,7 +23,7 @@ const FileSchema = new Schema(
       enum: ["pend", "rejected", "approved"],
       default: "pend",
     },
-    user_id: { type: Number, required: true, ref: User },
+    created_by: { type: Number, required: true, ref: User },
   },
   {
     timestamps: true,
@@ -23,7 +32,7 @@ const FileSchema = new Schema(
 
 FileSchema.plugin(autoIncrement.plugin, "File");
 
-FileSchema.index({ user_id: 1 });
+FileSchema.index({ created_by: 1 });
 FileSchema.index({ status: 1 });
 
 const File = connection.model("File", FileSchema);
