@@ -11,7 +11,6 @@ export interface AuthModel {
 }
 
 export interface IUser extends Document {
-  // _id: number;
   name: string;
   familly: string;
   username: string;
