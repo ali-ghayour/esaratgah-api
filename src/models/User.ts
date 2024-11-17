@@ -3,9 +3,15 @@ import { Document, Schema } from "mongoose";
 import { connection, autoIncrement } from "../config/db";
 import Role, { IRole, IRolePopulated } from "./Role";
 import Permission, { IPermission } from "./Permission";
+import File from "./File";
+
+export interface AuthModel {
+  api_token: string;
+  refreshToken?: string;
+}
 
 export interface IUser extends Document {
-  user_id: number;
+  // _id: number;
   name: string;
   familly: string;
   username: string;
@@ -17,6 +23,9 @@ export interface IUser extends Document {
   categories: Array<string>;
   files: { total_file: number; total_file_size: number };
   otp: { code: string; expire_at: number };
+  pic?: number;
+  language?: "en" | "fa";
+  auth?: AuthModel;
 }
 
 export interface IUserPopulated extends Omit<IUser, "role" | "permissions"> {
@@ -48,6 +57,12 @@ const UserSchema = new Schema<IUser>(
     otp: {
       code: { type: String, required: false },
       expire_at: { type: Number, required: false },
+    },
+    pic: { type: String, required: false, ref: "File" },
+    language: { type: String, enum: ["en", "fa"], default: "en" },
+    auth: {
+      api_token: { type: String },
+      refreshToken: { type: String },
     },
   },
   {
