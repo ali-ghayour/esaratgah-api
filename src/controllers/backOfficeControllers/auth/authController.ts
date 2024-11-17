@@ -1,9 +1,13 @@
 import { Request, Response, NextFunction } from "express";
 import User from "../../../models/User";
 
-interface ILogin {
+export interface ILogin {
   phone_number: string;
   otp: string;
+}
+
+export interface IRequestOTP {
+  phone_number: string;
 }
 
 const authController = class {
@@ -15,6 +19,16 @@ const authController = class {
       console.log(error);
       next(error);
     }
+  };
+
+  static request_otp = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const { phone_number } = req.body as IRequestOTP;
+    } catch (error) {}
   };
 
   static logout = async () => {};
