@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction, ErrorRequestHandler } from "express";
+import { Request, Response, NextFunction } from "express";
 import { CustomError } from "../helpers/CustomError";
 import { IResponse } from "../types";
 
