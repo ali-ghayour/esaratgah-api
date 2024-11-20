@@ -11,6 +11,7 @@ export interface AuthModel {
 }
 
 export interface IUser extends Document {
+  _id: number;
   name: string;
   familly: string;
   username: string;
@@ -34,19 +35,19 @@ export interface IUserPopulated extends Omit<IUser, "role" | "permissions"> {
 
 const UserSchema = new Schema<IUser>(
   {
-    name: { type: String, requred: true },
-    familly: { type: String, requred: true },
+    name: { type: String, required: true },
+    familly: { type: String, required: true },
     username: { type: String, required: true, unique: true },
     phone_number: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: [
       {
         type: Number,
-        reqired: false,
+        required: false,
         ref: Role,
       },
     ],
-    permissions: [{ type: Number, reqired: false, ref: Permission }],
+    permissions: [{ type: Number, required: false, ref: Permission }],
     camp: { type: String },
     categories: ["objectId"],
     files: {
@@ -71,9 +72,9 @@ const UserSchema = new Schema<IUser>(
 
 UserSchema.plugin(autoIncrement.plugin, "User");
 
-UserSchema.index({ user_id: 1 });
 UserSchema.index({ username: 1 });
 UserSchema.index({ phone_number: 1 });
+UserSchema.index({ camp: 1 });
 
 const User = connection.model("User", UserSchema);
 export default User;

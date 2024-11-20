@@ -1,40 +1,34 @@
-import getUserWithDetails from "../helpers/getUserWithDetails";
+import { Request, Response, NextFunction } from 'express';
+import { CustomError } from '../helpers/CustomError';
+import { IUser,IUserPopulated } from '../models/User'; // Adjust according to your models
+import { IPermission } from '../models/Permission';
 
-export const checkPermission = (permissionName: string) => {
-  return async (req: any, res: any, next: any) => {
+export const checkPermission =
+  (requiredPermissions: Array<IPermission['name']>) =>
+  (req: Request, res: Response, next: NextFunction) => {
     try {
-      const userId = req.user.user_id; // Assuming user_id is available in `req.user`
-      const user = await getUserWithDetails(userId);
+      const user = req.user as IUserPopulated | undefined;
 
       if (!user) {
-        return res.status(404).json({ error: "User not found" });
+        throw new CustomError('Unauthorized', 401, {
+          user: ['User is not authenticated'],
+        });
       }
 
-      const userPermissions = new Set<string>();
+      const userPermissions = user.permissions.map((perm) => perm.name);
 
-      // Collect permissions directly assigned to the user
-      user.permissions.forEach((perm) => {
-        userPermissions.add(perm.name);
-      });
+      const hasPermission = requiredPermissions.some((required) =>
+        userPermissions.includes(required)
+      );
 
-      //   // Collect permissions from roles
-      //   for (const role of user.role) {
-      //     const populatedRole = await role.populate("permissions");
-      //     populatedRole.permissions.forEach((perm: any) => {
-      //       userPermissions.add(perm.name);
-      //     });
-      //   }
-
-      if (!userPermissions.has(permissionName)) {
-        return res.status(403).json({ error: "Permission denied" });
+      if (!hasPermission) {
+        throw new CustomError('Forbidden', 403, {
+          permission: ['User does not have the required permissions'],
+        });
       }
 
-      next();
-    } catch (error) {
-      console.error("Permission check error:", error);
-      res.status(500).json({ error: "Internal server error" });
+      next(); // Proceed to the next middleware or route handler
+    } catch (err) {
+      next(err); // Pass the error to the error handler
     }
   };
-};
-
-export default checkPermission;
