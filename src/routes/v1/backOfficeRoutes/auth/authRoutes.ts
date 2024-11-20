@@ -5,6 +5,7 @@ import checkPermission from "../../../../middleware/checkPermission";
 const router = express.Router();
 
 router.post("/login", authController.login);
+router.post("/request_otp", authController.request_otp);
 // router.post("/");
 
 export default router;
