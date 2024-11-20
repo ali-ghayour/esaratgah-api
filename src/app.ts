@@ -1,5 +1,6 @@
 // src/app.ts
 import express, { NextFunction, Request, Response } from "express";
+import { errorHandler } from "./middleware/errorHandler";
 import cors from "cors";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
@@ -34,16 +35,6 @@ app.get("/", async (req: Request, res: Response, next: NextFunction) => {
 app.use(apiRoutes); // Use the grouped routes
 
 // Error handling middleware (optional)
-app.use(
-  (
-    err: any,
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    console.error(err.stack);
-    res.status(500).send("Something went wrong!");
-  }
-);
+app.use(errorHandler);
 
 export default app;
