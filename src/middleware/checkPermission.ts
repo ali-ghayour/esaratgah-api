@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { CustomError } from '../helpers/CustomError';
-import { IUser,IUserPopulated } from '../models/User'; // Adjust according to your models
+import { IUserPopulated } from '../models/User'; // Adjust according to your models
 import { IPermission } from '../models/Permission';
+import { havePermission } from '../helpers/havePermission';
 
 export const checkPermission =
   (requiredPermissions: Array<IPermission['name']>) =>
@@ -14,14 +15,8 @@ export const checkPermission =
           user: ['User is not authenticated'],
         });
       }
-
-      const userPermissions = user.permissions.map((perm) => perm.name);
-
-      const hasPermission = requiredPermissions.some((required) =>
-        userPermissions.includes(required)
-      );
-
-      if (!hasPermission) {
+      
+      if (!havePermission(requiredPermissions, user)) {
         throw new CustomError('Forbidden', 403, {
           permission: ['User does not have the required permissions'],
         });

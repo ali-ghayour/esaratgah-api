@@ -13,7 +13,7 @@ export interface AuthModel {
 export interface IUser extends Document {
   _id: number;
   name: string;
-  familly: string;
+  family: string;
   username: string;
   phone_number: string;
   password: string;
@@ -36,10 +36,10 @@ export interface IUserPopulated extends Omit<IUser, "role" | "permissions"> {
 const UserSchema = new Schema<IUser>(
   {
     name: { type: String, required: true },
-    familly: { type: String, required: true },
+    family: { type: String, required: true },
     username: { type: String, required: true, unique: true },
     phone_number: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String, required: false },
     role: [
       {
         type: Number,

@@ -3,7 +3,7 @@
  * @param length - The length of the OTP to generate.
  * @returns A string representing the OTP.
  */
-export function createNumber(length: number): string {
+export async function createNumber(length: number): Promise<string> {
   if (length <= 0) {
     throw new Error("OTP length must be greater than 0.");
   }
