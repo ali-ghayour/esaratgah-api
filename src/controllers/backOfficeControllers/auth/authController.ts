@@ -96,15 +96,19 @@ const authController = class {
     res: Response,
     next: NextFunction
   ) => {
-    const { api_token } = req.body;
+    try {
+      const { api_token } = req.body;
 
-    const user = await User.findOne({ "auth.api_token": api_token });
+      const user = await User.findOne({ "auth.api_token": api_token });
 
-    if (!user) {
-      throw new CustomError("Invalid token!", 404);
+      if (!user) {
+        throw new CustomError("Invalid token!", 404);
+      }
+
+      res.status(200).json(user);
+    } catch (error) {
+      next(error);
     }
-
-    res.status(200).json(user);
   };
 
   static logout = async () => {};
