@@ -5,7 +5,7 @@ import User from "../../../models/User";
 const router = express.Router();
 
 router.post(
-  "/create",
+  "/",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const users = await createDummyUsers(5);
@@ -20,8 +20,8 @@ router.post(
   }
 );
 
-router.get(
-  "/delete",
+router.delete(
+  "/",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const deleted = await User.deleteMany();
