@@ -2,12 +2,17 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 
 export interface IJwtHelper {
   secret: string;
-  expiresIn: string | number; // Token expiration, e.g., "1h" or "7d"
+  expiresIn?: string | number; // Token expiration, e.g., "1h" or "7d"
+}
+
+export interface IToken extends JwtPayload {
+  _id : number,
+  phone_number:string
 }
 
 export class JwtHelper {
   private secret: string;
-  private expiresIn: string | number;
+  private expiresIn: string | number | undefined;
 
   constructor({ secret, expiresIn }: IJwtHelper) {
     this.secret = secret;
