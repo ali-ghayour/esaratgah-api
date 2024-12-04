@@ -6,8 +6,6 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import { json, urlencoded } from "body-parser";
 import apiRoutes from "./routes";
-import Diary from "./models/Diary";
-import JwtHelper from "./helpers/jwt";
 
 const app = express();
 

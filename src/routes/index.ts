@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import backofficeAuthV1 from "./v1/backOfficeRoutes/auth/authRoutes";
+import backOfficeUserV1 from "./v1/backOfficeRoutes/userRoutes"
 import userRoutesV1 from "./v1/userRoutes";
 import diaryRoutesV1 from "./v1/diaryRoutes";
 import userFakerRoutes from "./v1/seed/userFakerRoutes";
@@ -19,6 +20,7 @@ router.use("/api/v1/seeder/permissions", PermissionsSeederRoutes);
 
 /* backoffice routes V1*/
 router.use("/api/v1/backoffice", backofficeAuthV1);
+router.use("/api/v1/backoffice", backOfficeUserV1);
 
 // // Version 2 routes
 // router.use("/api/v2/users", userRoutesV2);

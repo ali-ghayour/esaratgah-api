@@ -13,16 +13,16 @@ export interface AuthModel {
 export interface IUser extends Document {
   _id: number;
   name: string;
-  family: string;
-  username: string;
+  familly: string;
+  username?: string;
   phone_number: string;
-  password: string;
-  role: number[];
-  permissions: number[];
-  camp: string;
-  categories: Array<string>;
-  files: { total_file: number; total_file_size: number };
-  otp: { code: string; expire_at: number };
+  password?: string;
+  role?: number[];
+  permissions?: number[];
+  camp?: string;
+  categories?: Array<string>;
+  files?: { total_file: number; total_file_size: number };
+  otp?: { code: string; expire_at: number };
   pic?: number;
   language?: "en" | "fa";
   auth?: AuthModel;
@@ -36,7 +36,7 @@ export interface IUserPopulated extends Omit<IUser, "role" | "permissions"> {
 const UserSchema = new Schema<IUser>(
   {
     name: { type: String, required: true },
-    family: { type: String, required: true },
+    familly: { type: String, required: true },
     username: { type: String, required: true, unique: true },
     phone_number: { type: String, required: true, unique: true },
     password: { type: String, required: false },
