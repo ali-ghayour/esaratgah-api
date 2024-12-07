@@ -24,7 +24,7 @@ export type PaginationState = {
 
 // Response helper function
 export const createResponse = <T>(
-  data?: T[],
+  data?: T,
   options?: {
     message?: string;
     errors?: { [key: string]: Array<string> };
@@ -32,7 +32,7 @@ export const createResponse = <T>(
     totalItems?: number;
   }
 ): {
-  data?: T[];
+  data?: T;
   payload?: {
     message?: string;
     errors?: { [key: string]: Array<string> };
