@@ -3,9 +3,10 @@ import { PaginationState } from "./QueryResponse";
 
 /**
  * Builds an aggregation pipeline for MongoDB queries.
- * Includes pagination, sorting, and search functionality.
+ * Includes pagination, sorting, search functionality, and optional field selection.
  * @param options - The query options from the client.
  * @param searchableFields - The fields to include in the dynamic search condition.
+ * @param selectFields - Optional: Fields to include or exclude in the projection stage.
  * @returns An array of pipeline stages for MongoDB aggregation and pagination state.
  */
 export function buildAggregationPipeline<T>(
@@ -22,7 +23,8 @@ export function buildAggregationPipeline<T>(
     sort?: string;
     order?: "asc" | "desc";
   },
-  searchableFields: string[] = []
+  searchableFields: string[] = [],
+  selectFields?: Record<string, 1 | 0>
 ): { pipeline: PipelineStage[]; pagination: PaginationState } {
   const pipeline: PipelineStage[] = [];
 
@@ -46,14 +48,18 @@ export function buildAggregationPipeline<T>(
 
   // Add pagination stages
   const skip = (currentPage - 1) * perPage;
-  pipeline.push({ $skip: skip });
-  pipeline.push({ $limit: perPage });
+  pipeline.push({ $skip: skip }, { $limit: perPage });
+
+  // Optional select (project) stage
+  if (selectFields && Object.keys(selectFields).length > 0) {
+    pipeline.push({ $project: selectFields });
+  }
 
   // Construct pagination state
   const pagination: PaginationState = {
     page: currentPage,
     items_per_page: perPage,
   };
-
+  
   return { pipeline, pagination };
 }

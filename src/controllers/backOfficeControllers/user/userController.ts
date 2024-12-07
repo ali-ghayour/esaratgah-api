@@ -6,6 +6,7 @@ import { buildAggregationPipeline } from "../../../helpers/Query/AggregationPipe
 import { generatePaginationLinks } from "../../../helpers/Query/GeneratePaginationLinks";
 
 const userController = class {
+  // Create a new user
   static create = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const {
@@ -30,12 +31,17 @@ const userController = class {
         pic,
       });
 
-      res.status(200).json(user);
+      res.status(201).json(
+        createResponse([user], {
+          message: "User created successfully",
+        })
+      );
     } catch (error) {
       next(error);
     }
   };
 
+  // Retrieve a list of users
   static get = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { page, items_per_page, search, sort, order } = req.query;
@@ -50,15 +56,25 @@ const userController = class {
       };
 
       // Define searchable fields
-      const searchableFields = ["name", "familly", "description"]; // Adjust fields based on your schema
+      const searchableFields = ["name", "familly", "phone_number"]; // Adjust fields based on your schema
+
+      //   Define desire projec fiels
+
+      const selectFields: Record<string, 0 | 1> = {
+        name: 1,
+        familly: 1,
+        phone_number:1,
+        role:1,
+      };
 
       // Build aggregation pipeline
       const { pipeline, pagination } = buildAggregationPipeline(
         queryOptions,
-        searchableFields
+        searchableFields,
+        selectFields
       );
 
-      // Execute the pipeline
+      // Execute the aggregation pipeline
       const users = await User.aggregate(pipeline);
 
       // Count total items
@@ -67,7 +83,7 @@ const userController = class {
         | undefined;
       const totalItems = await User.countDocuments(matchStage?.$match || {});
 
-      // Update pagination with total items and links
+      // Update pagination state
       pagination.links = generatePaginationLinks(
         totalItems,
         pagination.page,
@@ -79,7 +95,6 @@ const userController = class {
         createResponse(users, {
           message: "Users retrieved successfully",
           pagination,
-          totalItems,
         })
       );
     } catch (error) {
@@ -87,15 +102,54 @@ const userController = class {
     }
   };
 
+  // Update an existing user
   static update = async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const { id } = req.params;
+      const updateData = req.body as Partial<IUser>;
+
+      const updatedUser = await User.findByIdAndUpdate(id, updateData, {
+        new: true,
+      });
+
+      if (!updatedUser) {
+        return res.status(404).json(
+          createResponse([], {
+            message: "User not found",
+          })
+        );
+      }
+
+      res.status(200).json(
+        createResponse([updatedUser], {
+          message: "User updated successfully",
+        })
+      );
     } catch (error) {
       next(error);
     }
   };
 
+  // Delete a user
   static delete = async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const { id } = req.params;
+
+      const deletedUser = await User.findByIdAndDelete(id);
+
+      if (!deletedUser) {
+        return res.status(404).json(
+          createResponse([], {
+            message: "User not found",
+          })
+        );
+      }
+
+      res.status(200).json(
+        createResponse([deletedUser], {
+          message: "User deleted successfully",
+        })
+      );
     } catch (error) {
       next(error);
     }
