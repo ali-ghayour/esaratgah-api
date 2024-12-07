@@ -34,7 +34,7 @@ const authController = class {
       }
 
       // Validate OTP
-      if (code !== user.otp.code || Date.now() > user.otp.expire_at) {
+      if (code !== user.otp!.code || Date.now() > user.otp!.expire_at) {
         throw new CustomError("Invalid or expired OTP", 400, {
           code: ["Invalid or expired OTP"],
         });
