@@ -25,6 +25,8 @@ export interface IUser extends Document {
   otp?: { code: string; expire_at: number };
   pic?: number;
   language?: "en" | "fa";
+  status: "pending" | "active" | "locked";
+  deleted?: boolean;
   auth?: AuthModel;
 }
 
@@ -63,6 +65,16 @@ const UserSchema = new Schema<IUser>(
     auth: {
       api_token: { type: String },
       refreshToken: { type: String },
+    },
+    status: {
+      type: String,
+      required: true,
+      enum: ["pending", "active", "locked"],
+      default: "active",
+    },
+    deleted: {
+      type: Boolean,
+      default: false,
     },
   },
   {

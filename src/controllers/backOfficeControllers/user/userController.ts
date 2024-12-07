@@ -4,6 +4,7 @@ import User, { IUser } from "../../../models/User";
 import { createResponse } from "../../../helpers/Query/QueryResponse";
 import { buildAggregationPipeline } from "../../../helpers/Query/AggregationPipeline";
 import { generatePaginationLinks } from "../../../helpers/Query/GeneratePaginationLinks";
+import { CustomError } from "../../../helpers/CustomError";
 
 const userController = class {
   // Create a new user
@@ -63,8 +64,10 @@ const userController = class {
       const selectFields: Record<string, 0 | 1> = {
         name: 1,
         familly: 1,
-        phone_number:1,
-        role:1,
+        phone_number: 1,
+        role: 1,
+        status: 1,
+        deleted: 1,
       };
 
       // Build aggregation pipeline
@@ -102,6 +105,30 @@ const userController = class {
     }
   };
 
+  static getUserById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const userId = req.params._id;
+      const user = await User.findById(userId);
+
+      if (!user) {
+        throw new CustomError("Invalid ID", 404, {
+          id: ["Invalid ID"],
+        });
+      }
+      // Send response
+      res.status(200).json(
+        createResponse(user, {
+          message: "Users retrieved successfully",
+        })
+      );
+    } catch (error) {
+      next(error);
+    }
+  };
   // Update an existing user
   static update = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -133,21 +160,22 @@ const userController = class {
   // Delete a user
   static delete = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { id } = req.params;
+      const { _id } = req.params;
 
-      const deletedUser = await User.findByIdAndDelete(id);
-
+      const deletedUser = await User.updateOne(
+        { _id },
+        {
+          $set: { deleted: true },
+        }
+      );
       if (!deletedUser) {
-        return res.status(404).json(
-          createResponse([], {
-            message: "User not found",
-          })
-        );
+        throw new CustomError("Invalid ID", 404, {
+          id: ["Invalid ID"],
+        });
       }
-
       res.status(200).json(
-        createResponse([deletedUser], {
-          message: "User deleted successfully",
+        createResponse("", {
+          message: "Users retrieved successfully",
         })
       );
     } catch (error) {
