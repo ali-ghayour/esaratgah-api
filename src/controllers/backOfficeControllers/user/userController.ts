@@ -12,7 +12,7 @@ const userController = class {
     try {
       const {
         name,
-        familly,
+        family,
         username,
         phone_number,
         role,
@@ -23,7 +23,7 @@ const userController = class {
 
       const user = await User.create({
         name,
-        familly,
+        family,
         username,
         phone_number,
         role,
@@ -57,13 +57,13 @@ const userController = class {
       };
 
       // Define searchable fields
-      const searchableFields = ["name", "familly", "phone_number"]; // Adjust fields based on your schema
+      const searchableFields = ["name", "family", "phone_number"]; // Adjust fields based on your schema
 
       //   Define desire projec fiels
 
       const selectFields: Record<string, 0 | 1> = {
         name: 1,
-        familly: 1,
+        family: 1,
         phone_number: 1,
         role: 1,
         status: 1,

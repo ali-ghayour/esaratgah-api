@@ -9,7 +9,7 @@ const createDummyUsers = async (count: number) => {
   for (let i = 0; i < count; i++) {
     user = {
       name: faker.person.firstName(),
-      familly : faker.person.lastName(),
+      family : faker.person.lastName(),
       username: faker.person.fullName(),
       phone_number: faker.phone.number(),
     };
