@@ -1,8 +1,8 @@
 import Permission from "../../models/Permission";
 
-// Function to create dummy users
+// Function to create permissions
 const createPermissions = async () => {
-  const permissions = ["backOfficeLogin", "createUser", "readUser"];
+  const permissions = ["fullAccess","backOfficeLogin", "createUser", "readUser"];
 
   permissions.map(
     async (permission) =>

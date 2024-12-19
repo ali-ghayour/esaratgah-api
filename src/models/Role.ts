@@ -6,7 +6,7 @@ export interface IRole extends Document {
   _id: number;
   name: string;
   slug: string;
-  permissions: number[];
+  permissions?: number[];
 }
 
 export interface IRolePopulated extends Omit<IRole, "permissions"> {
@@ -17,7 +17,7 @@ const RoleSchema = new Schema<IRole>(
   {
     name: { type: String, required: true, unique: true },
     slug: { type: String, required: true, unique: true },
-    permissions: [{ type: Number, required: true, ref: Permission }],
+    permissions: [{ type: Number, required: false, ref: Permission }],
   },
   {
     timestamps: true,
