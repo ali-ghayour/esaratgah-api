@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import User, { IUserPopulated } from "../../../models/User";
-import { IRequest } from "../../../types";
-import { CustomError } from "../../../helpers/CustomError";
-import { havePermission } from "../../../helpers/havePermission";
-import { createNumber } from "../../../helpers/createNumber";
-import JwtHelper, { IToken } from "../../../helpers/jwt";
-import bcryptHelper from "../../../helpers/bcryptHelper"; // Assuming you have a bcrypt helper
+import User, { IUserPopulated } from "../../models/User";
+import { IRequest } from "../../types";
+import { CustomError } from "../../helpers/CustomError";
+import { havePermission } from "../../helpers/havePermission";
+import { createNumber } from "../../helpers/createNumber";
+import JwtHelper, { IToken } from "../../helpers/jwt";
+import bcryptHelper from "../../helpers/bcryptHelper"; // Assuming you have a bcrypt helper
 
 export interface ILogin {
   phone_number: string;

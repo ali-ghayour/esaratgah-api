@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-import backofficeAuthV1 from "./v1/backOfficeRoutes/auth/authRoutes";
+import backofficeAuthV1 from "./v1/backOfficeRoutes/authRoutes";
 import backOfficeUserV1 from "./v1/backOfficeRoutes/userRoutes"
 import userRoutesV1 from "./v1/userRoutes";
 import diaryRoutesV1 from "./v1/diaryRoutes";

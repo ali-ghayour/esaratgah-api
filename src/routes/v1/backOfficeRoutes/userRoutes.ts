@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
-import userController from "../../../controllers/backOfficeControllers/user/userController";
+import userController from "../../../controllers/backOfficeControllers/userController";
 // import checkPermission from "../../../../middleware/checkPermission";
 
 const router = express.Router();

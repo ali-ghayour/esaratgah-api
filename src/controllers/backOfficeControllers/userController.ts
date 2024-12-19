@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import { PipelineStage } from "mongoose";
-import User, { IUser } from "../../../models/User";
-import { createResponse } from "../../../helpers/Query/QueryResponse";
-import { buildAggregationPipeline } from "../../../helpers/Query/AggregationPipeline";
-import { generatePaginationLinks } from "../../../helpers/Query/GeneratePaginationLinks";
-import { CustomError } from "../../../helpers/CustomError";
+import User, { IUser } from "../../models/User";
+import { createResponse } from "../../helpers/Query/QueryResponse";
+import { buildAggregationPipeline } from "../../helpers/Query/AggregationPipeline";
+import { generatePaginationLinks } from "../../helpers/Query/GeneratePaginationLinks";
+import { CustomError } from "../../helpers/CustomError";
 
 const userController = class {
   // Create a new user
