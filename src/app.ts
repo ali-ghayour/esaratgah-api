@@ -6,7 +6,12 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import { json, urlencoded } from "body-parser";
 import apiRoutes from "./routes";
+import GlobalPermissions from "./helpers/Permissions";
 
+
+// const test = new GlobalPermissions
+// test.setAllPermissions(true);
+// console.log(test.getPermissions);
 const app = express();
 
 // Middleware

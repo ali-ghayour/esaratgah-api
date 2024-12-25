@@ -22,9 +22,9 @@ const authController = class {
       const { phone_number, code } = req.body as IRequest;
 
       // Fetch user and populate permissions
-      const user = (await User.findOne({ phone_number }).populate(
-        "permissions"
-      )) as unknown as IUserPopulated;
+      const user = (await User.findOne({ phone_number })) as // .populate(
+      //   "permissions"
+      unknown as IUserPopulated;
 
       // Validate user existence
       if (!user) {
@@ -41,7 +41,7 @@ const authController = class {
       }
 
       // Check user permissions
-      if (!havePermission(["backOfficeLogin"], user)) {
+      if (!havePermission("backofficeAccess", "read", user)) {
         throw new CustomError("You don't have permission", 403, {
           permission: ["Access denied!"],
         });
@@ -89,7 +89,7 @@ const authController = class {
       }
 
       // Check user permissions
-      if (!havePermission(["backOfficeLogin"], user)) {
+      if (!havePermission("backofficeAccess", "read", user)) {
         throw new CustomError("You don't have permission", 403, {
           permission: ["Access denied!"],
         });

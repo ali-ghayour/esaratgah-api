@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-import createDummyUsers from "../../../test/faker/userFaker";
+import createDummyUsers, { createAdminUser } from "../../../test/faker/userFaker";
 import User from "../../../models/User";
 
 const router = express.Router();
@@ -12,6 +12,22 @@ router.post(
       res.status(200).json({
         success: true,
         users,
+      });
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
+);
+
+router.post(
+  "/admin",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const user = await createAdminUser();
+      res.status(200).json({
+        success: true,
+        user,
       });
     } catch (error) {
       console.log(error);
