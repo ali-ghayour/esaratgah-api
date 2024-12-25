@@ -16,7 +16,7 @@ export interface IUser extends Document {
   username?: string;
   phone_number: string;
   password?: string;
-  role?: number[];
+  role?: number;
   permissions: {
     [key: string]: {
       read: boolean;
@@ -38,7 +38,7 @@ export interface IUser extends Document {
 
 // export interface IUserPopulated extends Omit<IUser, "role" | "permissions"> {
 export interface IUserPopulated extends Omit<IUser, "role"> {
-  role: IRole[]; // Populated roles
+  role: IRole; // Populated roles
   // permissions: IPermission[]; // Populated permissions
 }
 
@@ -49,13 +49,11 @@ const UserSchema = new Schema<IUser>(
     username: { type: String, required: true, unique: true },
     phone_number: { type: String, required: true, unique: true },
     password: { type: String, required: false },
-    role: [
-      {
-        type: Number,
-        required: false,
-        ref: Role,
-      },
-    ],
+    role: {
+      type: Number,
+      required: false,
+      ref: Role,
+    },
     permissions: { type: Object, required: true },
     camp: { type: String },
     categories: ["objectId"],

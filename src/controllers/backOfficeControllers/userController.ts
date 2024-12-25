@@ -70,16 +70,24 @@ const userController = class {
         deleted: 1,
       };
 
+      const populatableFields = [
+        {
+          path: "role",
+          from: "roles",
+          localField: "role",
+          foreignField: "_id",
+        }, // Populate 'role'
+      ];
       // Build aggregation pipeline
       const { pipeline, pagination } = buildAggregationPipeline(
         queryOptions,
         searchableFields,
-        selectFields
+        selectFields,
+        populatableFields
       );
 
       // Execute the aggregation pipeline
       const users = await User.aggregate(pipeline);
-
       // Count total items
       const matchStage = pipeline.find((stage) => "$match" in stage) as
         | PipelineStage.Match
@@ -132,19 +140,22 @@ const userController = class {
   // Update an existing user
   static update = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { id } = req.params;
-      const updateData = req.body as Partial<IUser>;
+      const { _id } = req.params;
+      const { name, family, role, camp, pic, status } =
+        req.body as Partial<IUser>;
 
-      const updatedUser = await User.findByIdAndUpdate(id, updateData, {
-        new: true,
-      });
+      const updatedUser = await User.findByIdAndUpdate(
+        _id,
+        { name, family, role, camp, pic, status },
+        {
+          new: true,
+        }
+      );
 
       if (!updatedUser) {
-        return res.status(404).json(
-          createResponse([], {
-            message: "User not found",
-          })
-        );
+        throw new CustomError("User Not Found!", 400, {
+          message: ["User Not Found!"],
+        });
       }
 
       res.status(200).json(
