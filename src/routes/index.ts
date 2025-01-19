@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import backofficeAuthV1 from "./v1/backOfficeRoutes/authRoutes";
 import backOfficeUserV1 from "./v1/backOfficeRoutes/userRoutes"
 import backOfficeRoleV1 from "./v1/backOfficeRoutes/roleRoutes"
+import backOfficeFileV1 from "./v1/backOfficeRoutes/fileRoutes";
 import userRoutesV1 from "./v1/userRoutes";
 import diaryRoutesV1 from "./v1/diaryRoutes";
 import userFakerRoutes from "./v1/seed/userFakerRoutes";
@@ -23,6 +24,7 @@ router.use("/api/v1/seeder/roles", RolesSeederRoutes);
 router.use("/api/v1/backoffice", backofficeAuthV1);
 router.use("/api/v1/backoffice", backOfficeUserV1);
 router.use("/api/v1/backoffice", backOfficeRoleV1);
+router.use("/api/v1/backoffice", backOfficeFileV1);
 
 // // Version 2 routes
 // router.use("/api/v2/users", userRoutesV2);

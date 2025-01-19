@@ -18,6 +18,7 @@ const app = express();
 app.use(cors());
 app.use(morgan("dev"));
 app.use(json());
+app.use('/uploads', express.static('uploads')); // Serve uploaded files
 app.use(urlencoded({ extended: true }));
 app.use(cookieParser());
 

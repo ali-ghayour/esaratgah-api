@@ -3,27 +3,30 @@ import { connection, autoIncrement } from "../config/db";
 import User from "./User";
 
 export interface IFile extends Document {
-  name: string;
-  type: string;
-  path: string;
+  originalName: string;
+  fileName: string;
+  mimeType: string;
   size: number;
-  status: string;
+  sizes: {
+    small: string; // Path to small version
+    medium: string; // Path to medium version
+    large: string; // Path to large version
+  };
   created_by: number;
 }
 
 const FileSchema = new Schema<IFile>(
   {
-    name: { type: String, required: true },
-    type: { type: String, required: true },
-    path: { type: String, required: true },
+    originalName: { type: String, required: true },
+    fileName: { type: String, required: true },
+    mimeType: { type: String, required: true },
     size: { type: Number, required: true },
-    status: {
-      type: String,
-      require: true,
-      enum: ["pend", "rejected", "approved"],
-      default: "pend",
+    sizes: {
+      small: { type: String, required: true },
+      medium: { type: String, required: true },
+      large: { type: String, required: true },
     },
-    created_by: { type: Number, required: true, ref: User },
+    // created_by: { type: Number, required: true, ref: User },
   },
   {
     timestamps: true,
