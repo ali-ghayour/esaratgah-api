@@ -4,7 +4,7 @@ declare global {
   namespace Express {
     export interface Request {
       body: IRequest; // Add your custom request type
-      user?: { _id: number; name: string }; // Example: Add authenticated user info
+      user?: { _id: number; phone_number: string }; // Example: Add authenticated user info
     }
 
     export interface Response<T = any> {

@@ -1,10 +1,16 @@
 import express, { Request, Response, NextFunction } from "express";
 import userController from "../../../controllers/backOfficeControllers/userController";
-// import checkPermission from "../../../../middleware/checkPermission";
+import { checkPermission } from "../../../middleware/checkPermission";
+import { authenticateUser } from "../../../middleware/authenticateUser";
 
 const router = express.Router();
 
-router.get("/users/query", userController.get);
+router.get(
+  "/users/query",
+  authenticateUser(),
+  checkPermission("userManagement", "read"),
+  userController.get
+);
 router.get("/user/:_id", userController.getUserById);
 router.put("/user/:_id", userController.update);
 router.delete("/user/:_id", userController.delete);

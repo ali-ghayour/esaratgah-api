@@ -11,7 +11,7 @@ import { havePermission } from "../helpers/havePermission";
  */
 export const checkPermission =
   (controller: string, action: "read" | "write" | "create" | "delete") =>
-  (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
       // Get the authenticated user from the request
       const user = req.user as IUserPopulated | undefined;
@@ -23,7 +23,7 @@ export const checkPermission =
       }
 
       // Check if the user has the required permission
-      const hasPermission = havePermission(controller, action, user);
+      const hasPermission = await havePermission(controller, action, user);
 
       if (!hasPermission) {
         throw new CustomError("Forbidden", 403, {
