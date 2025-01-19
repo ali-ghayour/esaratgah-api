@@ -29,8 +29,5 @@ router.delete(
   checkPermission("userManagement", "delete"),
   userController.delete
 );
-// router.post("/request_otp", userController.request_otp);
-// router.post("/verify_token", userController.getUserByToken);
-// router.post("/logout", userController.logout);
 
 export default router;
