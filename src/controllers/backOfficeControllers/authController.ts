@@ -6,6 +6,7 @@ import { havePermission } from "../../helpers/havePermission";
 import { createNumber } from "../../helpers/createNumber";
 import JwtHelper, { IToken } from "../../helpers/jwt";
 import bcryptHelper from "../../helpers/bcryptHelper"; // Assuming you have a bcrypt helper
+import { createResponse } from "../../helpers/Query/QueryResponse";
 
 export interface ILogin {
   phone_number: string;
@@ -22,9 +23,9 @@ const authController = class {
       const { phone_number, code } = req.body as IRequest;
 
       // Fetch user and populate permissions
-      const user = (await User.findOne({ phone_number })) as // .populate(
-      //   "permissions"
-      unknown as IUserPopulated;
+      const user = (await User.findOne({
+        phone_number,
+      })) as unknown as IUserPopulated; //   "permissions" // .populate(
 
       // Validate user existence
       if (!user) {
@@ -105,9 +106,14 @@ const authController = class {
 
       console.log(`OTP sent: ${code}`); // Log for debugging; replace with actual SMS service
 
-      res.status(203).json({
-        sent_code: true,
-      });
+      res.status(203).json(
+        createResponse(
+          { sent_code: true ,expire_at},
+          {
+            message: `OTP sent successfully to phone number ${phone_number}`,
+          }
+        )
+      );
     } catch (error) {
       next(error); // Pass error to global error handler
     }
