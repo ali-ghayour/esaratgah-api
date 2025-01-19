@@ -11,9 +11,24 @@ router.get(
   checkPermission("userManagement", "read"),
   userController.get
 );
-router.get("/user/:_id", userController.getUserById);
-router.put("/user/:_id", userController.update);
-router.delete("/user/:_id", userController.delete);
+router.get(
+  "/user/:_id",
+  authenticateUser(),
+  checkPermission("userManagement", "read"),
+  userController.getUserById
+);
+router.put(
+  "/user/:_id",
+  authenticateUser(),
+  checkPermission("userManagement", "write"),
+  userController.update
+);
+router.delete(
+  "/user/:_id",
+  authenticateUser(),
+  checkPermission("userManagement", "delete"),
+  userController.delete
+);
 // router.post("/request_otp", userController.request_otp);
 // router.post("/verify_token", userController.getUserByToken);
 // router.post("/logout", userController.logout);
