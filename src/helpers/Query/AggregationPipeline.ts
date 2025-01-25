@@ -6,7 +6,7 @@ import { PaginationState } from "./QueryResponse";
  * Includes pagination, sorting, search functionality, field selection, and population.
  * @param options - The query options from the client.
  * @param searchableFields - The fields to include in the dynamic search condition.
- * @param selectFields - Optional: Fields to include or exclude in the projection stage.
+ * @param selectFields - Optional: Fields to include or exclude in the projection stage (supports nested fields).
  * @param populatableFields - Optional: Fields to populate using $lookup in the aggregation pipeline.
  * @returns An object containing the pipeline stages and pagination state.
  */
@@ -52,11 +52,6 @@ export function buildAggregationPipeline<T>(
   const skip = (currentPage - 1) * perPage;
   pipeline.push({ $skip: skip }, { $limit: perPage });
 
-  // Optional select (project) stage
-  if (selectFields && Object.keys(selectFields).length > 0) {
-    pipeline.push({ $project: selectFields });
-  }
-
   // Add $lookup stages for populatable fields
   if (populatableFields && populatableFields.length > 0) {
     for (const field of populatableFields) {
@@ -79,11 +74,38 @@ export function buildAggregationPipeline<T>(
     }
   }
 
+  // Optional select (project) stage
+  if (selectFields && Object.keys(selectFields).length > 0) {
+    const projection: Record<string, any> = {};
+
+    Object.entries(selectFields).forEach(([key, value]) => {
+      if (key.includes(".")) {
+        // Handle nested fields
+        const keys = key.split(".");
+        let current = projection;
+
+        keys.forEach((k, index) => {
+          if (!current[k]) {
+            current[k] = index === keys.length - 1 ? value : {};
+          }
+          current = current[k];
+        });
+      } else {
+        projection[key] = value;
+      }
+    });
+    // console.log(projection);
+
+    pipeline.push({ $project: projection });
+  }
+
   // Construct pagination state
   const pagination: PaginationState = {
     page: currentPage,
     items_per_page: perPage,
   };
+
+  // console.log(pipeline);
 
   return { pipeline, pagination };
 }
