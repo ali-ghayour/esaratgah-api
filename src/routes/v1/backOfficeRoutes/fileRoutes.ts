@@ -3,7 +3,7 @@ import { fileController } from "../../../controllers/backOfficeControllers/fileC
 import { checkPermission } from "../../../middleware/checkPermission";
 import { authenticateUser } from "../../../middleware/authenticateUser";
 import { asyncHandler } from "../../../helpers/asyncHandler";
-import { upload } from "../../../middleware/multerMiddleware";
+import { uploadMultiple } from "../../../middleware/multerMiddleware";
 
 const router = express.Router();
 
@@ -11,20 +11,35 @@ router.post(
   "/file",
   // authenticateUser(),
   // checkPermission("fileManagement", "create"),
-  upload.single('file'),
+  uploadMultiple,
   asyncHandler(fileController.uploadFile)
 );
 router.get(
-  "/file",
+  "/files/query",
   // authenticateUser(),
   // checkPermission("fileManagement", "read"),
   asyncHandler(fileController.getFiles)
 );
+router.get(
+  "/user/:_id",
+  authenticateUser(),
+  checkPermission("userManagement", "read"),
+  asyncHandler(fileController.getFileById)
+  // userController.getUserById
+);
 router.delete(
-  "/file/:id",
+  "/file/:_id",
   // authenticateUser(),
   // checkPermission("fileManagement", "delete"),
   asyncHandler(fileController.deleteFile)
+);
+
+router.get(
+  "/file",
+  // authenticateUser(),
+  // checkPermission("userManagement", "read"),
+  asyncHandler(fileController.getTotalFilesInfo)
+  // userController.getUserById
 );
 
 export default router;

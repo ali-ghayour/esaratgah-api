@@ -26,7 +26,7 @@ const FileSchema = new Schema<IFile>(
       medium: { type: String, required: true },
       large: { type: String, required: true },
     },
-    // created_by: { type: Number, required: true, ref: User },
+    created_by: { type: Number, required: false, ref: User },
   },
   {
     timestamps: true,

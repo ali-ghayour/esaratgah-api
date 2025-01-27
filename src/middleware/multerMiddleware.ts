@@ -41,11 +41,11 @@ const fileFilter = (
   }
 };
 
-// Multer middleware
-export const upload = multer({
+// Multer middleware to handle multiple file uploads (same type)
+export const uploadMultiple = multer({
   storage,
   limits: {
     fileSize: 5 * 1024 * 1024, // 5 MB size limit
   },
   fileFilter,
-});
+}).array("files", 20); // 'files' is the field name, 5 is the max number of files allowed

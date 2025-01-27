@@ -94,7 +94,6 @@ export function buildAggregationPipeline<T>(
         projection[key] = value;
       }
     });
-    // console.log(projection);
 
     pipeline.push({ $project: projection });
   }
@@ -104,8 +103,6 @@ export function buildAggregationPipeline<T>(
     page: currentPage,
     items_per_page: perPage,
   };
-
-  // console.log(pipeline);
 
   return { pipeline, pagination };
 }
