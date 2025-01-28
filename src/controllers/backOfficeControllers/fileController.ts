@@ -64,7 +64,7 @@ export class fileController {
   // Get all files controller
   static getFiles = async (req: Request, res: Response) => {
     try {
-      const { page, items_per_page, search, sort, order } = req.query;
+      const { page, items_per_page, search, sort, order ,...filters} = req.query;
 
       // Convert query params to the expected types
       const queryOptions = {
@@ -73,10 +73,11 @@ export class fileController {
         search: search as string,
         sort: sort as string,
         order: order as "asc" | "desc",
-      };
+        ...filters
+      }
 
       // Define searchable fields
-      const searchableFields = ["fileName", "family", "phone_number"]; // Adjust fields based on your schema
+      const searchableFields = ["fileName", "originalName", "phone_number"]; // Adjust fields based on your schema
 
       // Define selectable fields
       const selectFields: Record<string, 0 | 1> = {

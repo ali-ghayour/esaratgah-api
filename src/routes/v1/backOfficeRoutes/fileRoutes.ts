@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post(
   "/file",
-  // authenticateUser(),
+  authenticateUser(),
   // checkPermission("fileManagement", "create"),
   uploadMultiple,
   asyncHandler(fileController.uploadFile)
