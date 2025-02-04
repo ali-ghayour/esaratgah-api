@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import { PipelineStage } from "mongoose";
-import sharp from "sharp";
 // import { promises as fs } from "fs"; // For filesystem operations
 import fs from "fs";
 import File, { IFile } from "../../models/File"; // Your database model for file storage
@@ -131,9 +130,6 @@ export class fileController {
           pagination,
         })
       );
-
-      // const files = await File.find(); // Fetch all files
-      // res.status(200).json(files);
     } catch (error: any) {
       res
         .status(500)
