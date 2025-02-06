@@ -1,21 +1,21 @@
-import { Schema, Document } from "mongoose";
+import { Schema, Document, model } from "mongoose";
 import { connection, autoIncrement } from "../config/db";
-import User from "./User";
+import UserModel from "./User"; // Ensure the User model file path is correct
 
-export interface IFile extends Document {
+export interface IUpload extends Document {
   originalName: string;
   fileName: string;
   mimeType: string;
   size: number;
   sizes: {
-    small: string; // Path to small version
-    medium: string; // Path to medium version
-    large: string; // Path to large version
+    small: string;
+    medium: string;
+    large: string;
   };
   created_by: number;
 }
 
-const FileSchema = new Schema<IFile>(
+const uploadSchema = new Schema<IUpload>(
   {
     originalName: { type: String, required: true },
     fileName: { type: String, required: true },
@@ -26,17 +26,17 @@ const FileSchema = new Schema<IFile>(
       medium: { type: String, required: true },
       large: { type: String, required: true },
     },
-    created_by: { type: Number, required: false, ref: User },
+    created_by: { type: Number, ref: "User", required: false },
   },
   {
     timestamps: true,
   }
 );
 
-FileSchema.plugin(autoIncrement.plugin, "File");
+uploadSchema.plugin(autoIncrement.plugin, { model: "Upload" });
 
-FileSchema.index({ created_by: 1 });
-FileSchema.index({ status: 1 });
+uploadSchema.index({ created_by: 1 });
 
-const File = connection.model("File", FileSchema);
-export default File;
+const Upload = connection.model<IUpload>("Upload", uploadSchema);
+
+export default Upload;

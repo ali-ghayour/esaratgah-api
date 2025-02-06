@@ -5,29 +5,26 @@ import { createResponse } from "../../helpers/Query/QueryResponse";
 import { buildAggregationPipeline } from "../../helpers/Query/AggregationPipeline";
 import { generatePaginationLinks } from "../../helpers/Query/GeneratePaginationLinks";
 import { CustomError } from "../../helpers/CustomError";
+import Role from "../../models/Role";
 
 const userController = class {
   // Create a new user
   static create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const {
-        name,
-        family,
-        username,
-        phone_number,
-        role,
-        permissions,
-        camp,
-        pic,
-      } = req.body as IUser;
+      const { name, family, username, phone_number, role, camp, pic } =
+        req.body as IUser;
 
+      const userPermissions = (await Role.findById(role))!.permissions;
+
+      const full_name = name + " " + family;
       const user = await User.create({
         name,
         family,
+        full_name,
         username,
         phone_number,
         role,
-        permissions,
+        permissions: userPermissions,
         camp,
         pic,
       });
@@ -57,16 +54,18 @@ const userController = class {
       };
 
       // Define searchable fields
-      const searchableFields = ["name", "family", "phone_number"]; // Adjust fields based on your schema
+      const searchableFields = ["name", "family", "full_name", "phone_number"]; // Adjust fields based on your schema
 
       //   Define desire projec fiels
 
       const selectFields: Record<string, 0 | 1> = {
         name: 1,
         family: 1,
+        full_name: 1,
         phone_number: 1,
         role: 1,
         status: 1,
+        pic: 1,
         deleted: 1,
       };
 
@@ -77,6 +76,12 @@ const userController = class {
           localField: "role",
           foreignField: "_id",
         }, // Populate 'role'
+        {
+          path: "pic",
+          from: "uploads",
+          localField: "pic",
+          foreignField: "_id",
+        },
       ];
       // Build aggregation pipeline
       const { pipeline, pagination } = buildAggregationPipeline(
@@ -120,7 +125,7 @@ const userController = class {
   ) => {
     try {
       const userId = req.params._id;
-      const user = await User.findById(userId);
+      const user = await User.findById(userId).populate("pic");
 
       if (!user) {
         throw new CustomError("Invalid ID", 404, {
@@ -144,9 +149,21 @@ const userController = class {
       const { name, family, role, camp, pic, status } =
         req.body as Partial<IUser>;
 
+      const userPermissions = (await Role.findById(role))!.permissions;
+      const full_name = name + " " + family;
+
       const updatedUser = await User.findByIdAndUpdate(
         _id,
-        { name, family, role, camp, pic, status },
+        {
+          name,
+          family,
+          full_name,
+          role,
+          permissions: userPermissions,
+          camp,
+          pic,
+          status,
+        },
         {
           new: true,
         }

@@ -1,7 +1,7 @@
 import { Schema } from "mongoose";
 import { connection, autoIncrement } from "../config/db";
 import User from "./User";
-import File from "./File";
+import File from "./Upload";
 
 const DiaryCategorySchema = new Schema(
   {

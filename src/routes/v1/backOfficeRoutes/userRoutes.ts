@@ -17,6 +17,12 @@ router.get(
   checkPermission("userManagement", "read"),
   userController.getUserById
 );
+router.post(
+  "/user",
+  authenticateUser(),
+  checkPermission("userManagement", "create"),
+  userController.create
+);
 router.put(
   "/user/:_id",
   authenticateUser(),

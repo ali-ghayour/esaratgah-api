@@ -11,6 +11,7 @@ export const createAdminUser = async () => {
     const user = User.create({
       name: "Ali",
       family: "Ghayour",
+      full_name : "Ali Ghayour",
       username: "ali.ghayour",
       phone_number: "09358441163",
       permissions: userPermissions.getPermissions(),
@@ -27,9 +28,12 @@ const createDummyUsers = async (count: number) => {
   let user;
   let createdUser;
   for (let i = 0; i < count; i++) {
+    const [name, family] = [faker.person.firstName(), faker.person.lastName()]
+    const full_name = name + ' ' + family
     user = {
-      name: faker.person.firstName(),
-      family: faker.person.lastName(),
+      name,
+      family,
+      full_name,
       username: faker.person.fullName(),
       phone_number: faker.phone.number({ style: "international" }),
       permissions

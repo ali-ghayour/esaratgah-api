@@ -2,7 +2,7 @@
 import { Document, Schema } from "mongoose";
 import { connection, autoIncrement } from "../config/db";
 import Role, { IRole } from "./Role";
-import File from "./File";
+import Upload from "./Upload";
 
 export interface AuthModel {
   api_token: string;
@@ -13,6 +13,7 @@ export interface IUser extends Document {
   _id: number;
   name: string;
   family: string;
+  full_name: string;
   username?: string;
   phone_number: string;
   password?: string;
@@ -46,7 +47,8 @@ const UserSchema = new Schema<IUser>(
   {
     name: { type: String, required: true },
     family: { type: String, required: true },
-    username: { type: String, required: true, unique: true },
+    full_name: { type: String, required: true },
+    username: { type: String, required: false, unique: true },
     phone_number: { type: String, required: true, unique: true },
     password: { type: String, required: false },
     role: {
@@ -65,7 +67,7 @@ const UserSchema = new Schema<IUser>(
       code: { type: String, required: false },
       expire_at: { type: Number, required: false },
     },
-    pic: { type: String, required: false, ref: "File" },
+    pic: { type: Number, required: false, ref: Upload },
     language: { type: String, enum: ["en", "fa"], default: "en" },
     auth: {
       api_token: { type: String },
@@ -89,7 +91,7 @@ const UserSchema = new Schema<IUser>(
 
 UserSchema.plugin(autoIncrement.plugin, "User");
 
-UserSchema.index({ username: 1 });
+UserSchema.index({ full_name: 1 });
 UserSchema.index({ phone_number: 1 });
 UserSchema.index({ camp: 1 });
 

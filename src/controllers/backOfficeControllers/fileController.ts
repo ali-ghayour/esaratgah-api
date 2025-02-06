@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { PipelineStage } from "mongoose";
 // import { promises as fs } from "fs"; // For filesystem operations
 import fs from "fs";
-import File, { IFile } from "../../models/File"; // Your database model for file storage
+import Upload from "../../models/Upload"; // Your database model for file storage
 import path from "path";
 import { buildAggregationPipeline } from "../../helpers/Query/AggregationPipeline";
 import { generatePaginationLinks } from "../../helpers/Query/GeneratePaginationLinks";
@@ -34,16 +34,16 @@ export class fileController {
         await imageResizer(filePath, uploadDir, sizes);
 
         // Save file info to the database
-        const fileData = await File.create({
+        const fileData = await Upload.create({
           originalName: file.originalname,
           fileName: filename,
           mimeType: file.mimetype,
           // filePath: filePath,
           size: file.size,
           sizes: {
-            small: `uploads/small-${filename}`,
-            medium: `uploads/medium-${filename}`,
-            large: `uploads/large-${filename}`,
+            small: `small-${filename}`,
+            medium: `medium-${filename}`,
+            large: `large-${filename}`,
           },
           created_by: req.user?._id,
         });
@@ -63,7 +63,8 @@ export class fileController {
   // Get all files controller
   static getFiles = async (req: Request, res: Response) => {
     try {
-      const { page, items_per_page, search, sort, order ,...filters} = req.query;
+      const { page, items_per_page, search, sort, order, ...filters } =
+        req.query;
 
       // Convert query params to the expected types
       const queryOptions = {
@@ -72,8 +73,8 @@ export class fileController {
         search: search as string,
         sort: sort as string,
         order: order as "asc" | "desc",
-        ...filters
-      }
+        ...filters,
+      };
 
       // Define searchable fields
       const searchableFields = ["fileName", "originalName", "phone_number"]; // Adjust fields based on your schema
@@ -108,13 +109,15 @@ export class fileController {
         populatableFields
       );
 
-      const files = await File.aggregate(pipeline);
+      const files = await Upload.aggregate(pipeline);
 
       // Count total items
       const matchStage = pipeline.find((stage) => "$match" in stage) as
         | PipelineStage.Match
         | undefined;
-      const totalItems = await File.countDocuments(matchStage?.$match || {});
+      const totalItems = await Upload.countDocuments(
+        matchStage?.$match || {}
+      );
 
       // Update pagination state
       pagination.links = generatePaginationLinks(
@@ -145,7 +148,7 @@ export class fileController {
   ) => {
     try {
       const fileId = req.params._id;
-      const file = await File.findById(fileId);
+      const file = await Upload.findById(fileId);
 
       if (!file) {
         throw new CustomError("Invalid ID", 404, {
@@ -170,7 +173,7 @@ export class fileController {
 
       const uploadDir = "uploads/";
 
-      const file = await File.findById(_id);
+      const file = await Upload.findById(_id);
       if (!file) {
         return res.status(404).json({ message: "File not found." });
       }
@@ -183,7 +186,7 @@ export class fileController {
       );
 
       // Delete from database
-      await File.findByIdAndDelete(_id);
+      await Upload.findByIdAndDelete(_id);
 
       res.status(200).json({ message: "File deleted successfully!" });
     } catch (error: any) {
@@ -199,7 +202,7 @@ export class fileController {
     next: NextFunction
   ) => {
     try {
-      const stats = await File.aggregate([
+      const stats = await Upload.aggregate([
         {
           $group: {
             _id: null,
