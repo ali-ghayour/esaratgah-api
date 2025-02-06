@@ -1,5 +1,5 @@
 // src/models/User.ts
-import { Document, Schema } from "mongoose";
+import { Document, Schema, UpdateQuery } from "mongoose";
 import { connection, autoIncrement } from "../config/db";
 import Role, { IRole } from "./Role";
 import Upload from "./Upload";
@@ -14,7 +14,7 @@ export interface IUser extends Document {
   name: string;
   family: string;
   full_name: string;
-  username?: string;
+  // username?: string;
   phone_number: string;
   password?: string;
   role?: number;
@@ -40,15 +40,13 @@ export interface IUser extends Document {
 // export interface IUserPopulated extends Omit<IUser, "role" | "permissions"> {
 export interface IUserPopulated extends Omit<IUser, "role"> {
   role: IRole; // Populated roles
-  // permissions: IPermission[]; // Populated permissions
 }
 
 const UserSchema = new Schema<IUser>(
   {
     name: { type: String, required: true },
     family: { type: String, required: true },
-    full_name: { type: String, required: true },
-    username: { type: String, required: false, unique: true },
+    full_name: { type: String, required: false },
     phone_number: { type: String, required: true, unique: true },
     password: { type: String, required: false },
     role: {
@@ -56,7 +54,7 @@ const UserSchema = new Schema<IUser>(
       required: false,
       ref: Role,
     },
-    permissions: { type: Object, required: true },
+    permissions: { type: Object, required: false },
     camp: { type: String },
     categories: ["objectId"],
     files: {
@@ -90,6 +88,27 @@ const UserSchema = new Schema<IUser>(
 );
 
 UserSchema.plugin(autoIncrement.plugin, "User");
+UserSchema.pre("save", async function (next) {
+  this.full_name = this.name + " " + this.family;
+  if (this.isNew && this.role) {
+    const role = await Role.findById(this.role);
+    if (role) {
+      this.permissions = role.permissions;
+    }
+  }
+  next();
+});
+UserSchema.pre("findOneAndUpdate", async function (next) {
+  const update = this.getUpdate() as UpdateQuery<IUser>;
+  update.full_name = update.name + " " + update.family;
+  if (update.role) {
+    const role = await Role.findById(update.role);
+    if (role) {
+      update.permissions = role.permissions;
+    }
+  }
+  next();
+});
 
 UserSchema.index({ full_name: 1 });
 UserSchema.index({ phone_number: 1 });

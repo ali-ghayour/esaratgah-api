@@ -11,24 +11,18 @@ const userController = class {
   // Create a new user
   static create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { name, family, username, phone_number, role, camp, pic } =
+      const { name, family, phone_number, role, camp, pic } =
         req.body as IUser;
 
-      const userPermissions = (await Role.findById(role))!.permissions;
-
-      const full_name = name + " " + family;
-      const user = await User.create({
+      const user = new User({
         name,
         family,
-        full_name,
-        username,
         phone_number,
         role,
-        permissions: userPermissions,
         camp,
         pic,
       });
-
+      user.save();
       res.status(201).json(
         createResponse([user], {
           message: "User created successfully",
@@ -149,17 +143,12 @@ const userController = class {
       const { name, family, role, camp, pic, status } =
         req.body as Partial<IUser>;
 
-      const userPermissions = (await Role.findById(role))!.permissions;
-      const full_name = name + " " + family;
-
       const updatedUser = await User.findByIdAndUpdate(
         _id,
         {
           name,
           family,
-          full_name,
           role,
-          permissions: userPermissions,
           camp,
           pic,
           status,

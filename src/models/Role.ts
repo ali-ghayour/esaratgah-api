@@ -32,7 +32,10 @@ const RoleSchema = new Schema<IRole>(
 );
 
 RoleSchema.plugin(autoIncrement.plugin, "Role");
-
+RoleSchema.post("save", async function () {
+  const User = connection.model("User");
+  await User.updateMany({ role: this._id }, { permissions: this.permissions });
+});
 RoleSchema.index({ name: 1 });
 
 const Role = connection.model("Role", RoleSchema);
