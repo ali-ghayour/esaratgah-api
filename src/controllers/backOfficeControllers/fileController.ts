@@ -178,9 +178,15 @@ export class fileController {
         return res.status(404).json({ message: "File not found." });
       }
       // Delete files from disk
-      fs.unlinkSync(path.join(__dirname, "../../../", file.sizes.small));
-      fs.unlinkSync(path.join(__dirname, "../../../", file.sizes.medium));
-      fs.unlinkSync(path.join(__dirname, "../../../", file.sizes.large));
+      fs.unlinkSync(
+        path.join(__dirname, "../../../", uploadDir, file.sizes.small)
+      );
+      fs.unlinkSync(
+        path.join(__dirname, "../../../", uploadDir, file.sizes.medium)
+      );
+      fs.unlinkSync(
+        path.join(__dirname, "../../../", uploadDir, file.sizes.large)
+      );
       fs.unlinkSync(
         path.join(__dirname, "../../../", uploadDir, file.fileName)
       );
