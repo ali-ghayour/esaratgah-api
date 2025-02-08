@@ -5,7 +5,6 @@ import { CustomError } from "../../helpers/CustomError";
 import { havePermission } from "../../helpers/havePermission";
 import { createNumber } from "../../helpers/createNumber";
 import JwtHelper, { IToken } from "../../helpers/jwt";
-import bcryptHelper from "../../helpers/bcryptHelper"; // Assuming you have a bcrypt helper
 import { createResponse } from "../../helpers/Query/QueryResponse";
 
 export interface ILogin {
@@ -108,7 +107,7 @@ const authController = class {
 
       res.status(203).json(
         createResponse(
-          { sent_code: true ,expire_at},
+          { sent_code: true, expire_at },
           {
             message: `OTP sent successfully to phone number ${phone_number}`,
           }

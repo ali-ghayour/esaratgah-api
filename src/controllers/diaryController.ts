@@ -13,4 +13,4 @@ const diaryController = class diaryController {
   };
 };
 
-export default diaryController
+export default diaryController;

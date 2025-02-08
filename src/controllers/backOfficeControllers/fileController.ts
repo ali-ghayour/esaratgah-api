@@ -116,9 +116,7 @@ export class fileController {
       const matchStage = pipeline.find((stage) => "$match" in stage) as
         | PipelineStage.Match
         | undefined;
-      const totalItems = await Upload.countDocuments(
-        matchStage?.$match || {}
-      );
+      const totalItems = await Upload.countDocuments(matchStage?.$match || {});
 
       // Update pagination state
       pagination.links = generatePaginationLinks(

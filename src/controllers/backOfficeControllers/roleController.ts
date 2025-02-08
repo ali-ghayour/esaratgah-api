@@ -85,13 +85,11 @@ const roleController = class {
       role.permissions = permissions;
       role.save();
 
-      res
-        .status(201)
-        .json(
-          createResponse(role, {
-            message: `Role ${pervName} updated successfully!`,
-          })
-        );
+      res.status(201).json(
+        createResponse(role, {
+          message: `Role ${pervName} updated successfully!`,
+        })
+      );
     } catch (error) {
       next(error);
     }

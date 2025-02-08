@@ -59,7 +59,6 @@ export function buildAggregationPipeline<T>(
       matchStage[fieldName] = filterValue;
     }
   });
-  
 
   // Add dynamic search condition
   if (search && searchableFields.length > 0) {

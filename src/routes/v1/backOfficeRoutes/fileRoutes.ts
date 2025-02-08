@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from "express";
+import express from "express";
 import { fileController } from "../../../controllers/backOfficeControllers/fileController";
 import { checkPermission } from "../../../middleware/checkPermission";
 import { authenticateUser } from "../../../middleware/authenticateUser";

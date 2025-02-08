@@ -6,8 +6,8 @@ export interface IJwtHelper {
 }
 
 export interface IToken extends JwtPayload {
-  _id : number,
-  phone_number:string
+  _id: number;
+  phone_number: string;
 }
 
 export class JwtHelper {

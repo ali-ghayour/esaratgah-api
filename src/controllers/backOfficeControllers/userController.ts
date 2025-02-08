@@ -5,14 +5,12 @@ import { createResponse } from "../../helpers/Query/QueryResponse";
 import { buildAggregationPipeline } from "../../helpers/Query/AggregationPipeline";
 import { generatePaginationLinks } from "../../helpers/Query/GeneratePaginationLinks";
 import { CustomError } from "../../helpers/CustomError";
-import Role from "../../models/Role";
 
 const userController = class {
   // Create a new user
   static create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { name, family, phone_number, role, camp, pic } =
-        req.body as IUser;
+      const { name, family, phone_number, role, camp, pic } = req.body as IUser;
 
       const user = new User({
         name,
@@ -50,7 +48,7 @@ const userController = class {
       // Define searchable fields
       const searchableFields = ["name", "family", "full_name", "phone_number"]; // Adjust fields based on your schema
 
-      //   Define desire projec fiels
+      //   Define desire project fields
 
       const selectFields: Record<string, 0 | 1> = {
         name: 1,

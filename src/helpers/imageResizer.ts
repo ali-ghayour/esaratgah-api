@@ -31,7 +31,6 @@ export const imageResizer = async (
       const outputPath = path.join(outputDir, size.fileName);
       await fs.writeFile(outputPath, resizedBuffer);
     }
-
   } catch (error) {
     console.error("Error resizing image:", error);
     throw error;
