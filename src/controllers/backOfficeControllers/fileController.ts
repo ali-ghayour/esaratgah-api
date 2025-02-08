@@ -14,6 +14,7 @@ import { CustomError } from "../../helpers/CustomError";
 export class fileController {
   static uploadFile = async (req: Request, res: Response) => {
     try {
+      console.log(req.files);
       if (!req.files || !Array.isArray(req.files) || req.files.length === 0) {
         return res.status(400).json({
           message: "No files uploaded or unsupported file types.",

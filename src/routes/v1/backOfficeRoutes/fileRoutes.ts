@@ -1,9 +1,9 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import { fileController } from "../../../controllers/backOfficeControllers/fileController";
 import { checkPermission } from "../../../middleware/checkPermission";
 import { authenticateUser } from "../../../middleware/authenticateUser";
 import { asyncHandler } from "../../../helpers/asyncHandler";
-import { uploadMultiple } from "../../../middleware/multerMiddleware";
+import { handleFileUpload } from "../../../middleware/multerMiddleware";
 
 const router = express.Router();
 
@@ -11,7 +11,7 @@ router.post(
   "/file",
   authenticateUser(),
   // checkPermission("fileManagement", "create"),
-  uploadMultiple,
+  handleFileUpload,
   asyncHandler(fileController.uploadFile)
 );
 router.get(
