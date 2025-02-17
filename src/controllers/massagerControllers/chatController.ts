@@ -3,7 +3,7 @@ import {
   createChat,
   sendMessage,
   getMessages,
-} from "../services/ChatService/chatService";
+} from "../../services/ChatService/chatService";
 
 export const startChat = async (req: Request, res: Response) => {
   try {

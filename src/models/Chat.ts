@@ -6,16 +6,21 @@ import Message from "./Message";
 export interface IChat extends Document {
   _id: number;
   participants: number[]; // User IDs of participants
-  isGroup: boolean;
-  groupName?: string;
-  type: string;
+  setting: {
+    isGroup: boolean;
+    groupName?: string;
+    creator?: number;
+  }
 }
 
 const ChatSchema = new Schema<IChat>(
   {
     participants: [{ type: Number, ref: User, required: true }],
-    isGroup: { type: Boolean, default: false },
-    groupName: { type: String, required: false },
+    setting: {
+      isGroup: { type: Boolean, required: true, default: false },
+      groupName: { type: String, required: false },
+      creator: { type: Number, required: false, ref: User }
+    }
   },
   {
     timestamps: true,

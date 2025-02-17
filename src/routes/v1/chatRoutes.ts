@@ -3,7 +3,7 @@ import {
   startChat,
   postMessage,
   fetchMessages,
-} from "../../controllers/chatController";
+} from "../../controllers/massagerControllers/chatController";
 
 const router = Router();
 

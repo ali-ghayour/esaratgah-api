@@ -2,7 +2,8 @@ import app from "./app";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { createServer } from "http"; // Create HTTP server for Socket.io
-import { setupSocket } from "./sockets/chatSocket"; // Import the Socket.io setup function
+import { Server as SocketIOServer } from "socket.io";
+import initializeSocket from "./config/socket";
 
 dotenv.config();
 
@@ -21,7 +22,11 @@ console.log(`🔗 Connecting to MongoDB: ${DB_URI}`);
 const server = createServer(app);
 
 // Attach Socket.io setup
-setupSocket(server);
+const io = new SocketIOServer(server, {
+  cors: { origin: "*" },
+});
+
+initializeSocket(io);
 
 // Connect to MongoDB
 mongoose

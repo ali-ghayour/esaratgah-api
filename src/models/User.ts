@@ -94,13 +94,16 @@ const UserSchema = new Schema<IUser>(
 UserSchema.plugin(autoIncrement.plugin, "User");
 
 UserSchema.pre("save", async function (next) {
-  this.full_name = this.name + " " + this.family;
+  if (this.isNew && (this.name || this.family)) {
+    this.full_name = this.name + " " + this.family;
+  }
   if (this.isNew && this.role) {
     const role = await Role.findById(this.role);
     if (role) {
       this.permissions = role.permissions;
     }
   }
+  // if (this.isNew && this.fr)
   next();
 });
 
